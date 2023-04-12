@@ -1,13 +1,14 @@
 import random
 
 from .random import Random
+from .toppop import TopPop
 from .recommender import Recommender
 
 
 class Indexed(Recommender):
     def __init__(self, tracks_redis, recommendations_redis, catalog):
         self.recommendations_redis = recommendations_redis
-        self.fallback = Random(tracks_redis)
+        self.fallback = TopPop(tracks_redis, catalog.top_tracks[:100])
         self.catalog = catalog
 
     def recommend_next(self, user: int, prev_track: int, prev_track_time: float) -> int:
